@@ -77,7 +77,7 @@ export default {
         return;
       }
       var data1 = {
-        account: this.account,
+        tel: this.account,
         password: this.password,
       };
       var c = await this.$http.post("http://localhost:3001/tologin", data1);
