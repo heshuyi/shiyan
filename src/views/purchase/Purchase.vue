@@ -5,9 +5,9 @@
       <span>搜索</span>
     </div>
     <div ref="showbox" class="show-box">
-      <div>
-        孙心怡
-      </div>
+      <ul>
+        <li v-for="index in goods" :key="index.key"></li>
+      </ul>
     </div>
   </div>
 </template>
@@ -16,7 +16,16 @@ export default {
   name:'Purchase',
   data(){
     return{
-      goods:[]
+      goods:[
+        {
+          name:'heshuyi',//卖家
+          product_code:'',//卖家tel+卖家的第几个产品
+          product_name:'',//产品名称
+          product_description:'',//产品的描述
+          product_price:[],//产品的历史价格
+          product_img:'',//产品照片
+        }
+      ]
     }
   }, 
   created(){
@@ -24,7 +33,6 @@ export default {
   },
   mounted(){
     var clientHight = document.body.clientHight ||document.documentElement.clientHeight;
-    // console.log(clientHight);
     var showbox = this.$refs.showbox;
     var findbox = this.$refs.findbox;
     findbox = findbox.offsetHeight
@@ -61,6 +69,8 @@ export default {
     // height:100vh;
     background-color: blue;
     margin-bottom: 100rem;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 </style>

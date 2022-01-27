@@ -46,6 +46,8 @@
   </div>
 </template>
 <script>
+import {url as urlqing} from '../../js/url'
+
 import { Toast } from "vant";
 import { areaList } from "@vant/area-data";
 export default {
@@ -63,6 +65,10 @@ export default {
       newPassword2: "",
     };
   },
+  created(){
+    console.log(urlqing);
+  }
+  ,
   methods: {
     closeMakeNew() {
       this.makeNewBox = false;
@@ -80,7 +86,7 @@ export default {
         tel: this.account,
         password: this.password,
       };
-      var c = await this.$http.post("http://localhost:3001/tologin", data1);
+      var c = await this.$http.post(urlqing+"/tologin", data1);
       if (c.status == 200) {
         console.log(c);
         if (c.data.status == 1) {
@@ -113,7 +119,7 @@ export default {
         addressDetail: content.addressDetail,
       };
       // console.log(newcontent);
-      var res = await this.$http.post("http://localhost:3001/registered", newcontent);
+      var res = await this.$http.post(urlqing+"/registered", newcontent);
       if (res.status == 200) {
         alert(res.data.msg);
       }

@@ -5,6 +5,7 @@
   </div>
 </template>
 <script>
+import {url as urlqing} from '../../js/url'
 export default {
   name:'Mine',
   data(){
@@ -17,7 +18,7 @@ export default {
     // var token = {
     //   'token':token1
     // }
-    this.$http.get('http://localhost:3001/api11', {params:{'token':1}}).then((res)=>{
+    this.$http.get(urlqing+'/api11', {params:{'token':1}}).then((res)=>{
       console.log(res);
     })
   }
