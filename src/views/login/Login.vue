@@ -91,6 +91,7 @@ export default {
         console.log(c);
         if (c.data.status == 1) {
           window.sessionStorage.setItem("token", this.account);
+          this.$store.commit('setTel',this.account)
           this.$router.push("/shoppingapp");
         } else if (c.data.status == 2) {
           alert(c.data.msg);

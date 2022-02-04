@@ -5,6 +5,7 @@ import 'vant/lib/index.css'
 import axios from 'axios'
 import './js/rem'
 import Vant from 'vant'
+import store from '@/store/index'
 axios.defaults.withCredentials = true;
 Vue.use(Vant)
 Vue.prototype.$http = axios
@@ -12,6 +13,7 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 new Vue({
+  store,
   router,
   render: h => h(App)
 }).$mount('#app')

@@ -1,24 +1,25 @@
 <template>
   <div class="add-goods">
+    <div class="close-box"><div @click="closex" class="close-x">X</div></div>
     <ul>
       <li>
-        <van-field v-model="text" placeholder="请输入" label="产品名字" />
+        <van-field v-model="goodsname" placeholder="请输入" label="产品名字" />
       </li>
       <li>
-        <van-field v-model="text" placeholder="请输入" label="产品描述" />
+        <van-field v-model="goodstext" placeholder="请输入" label="产品描述" />
       </li>
       <li>
-        <van-field v-model="text" placeholder="请输入" label="产品价格" />
+        <van-field v-model="goodsmoney" placeholder="请输入" label="产品价格" />
       </li>
-      <li><van-field v-model="text" placeholder="请输入" label="文本" /></li>
       <van-uploader
         :after-read="onRead"
         accept="image/*"
-        style="width: 88px; height: 88px"
+        style="width: 88px; height: 88px;display: inline-block;"
       >
-      123
+      <span >点击添加照片</span>
         </van-uploader
       >
+      <van-button @click="submit" :loading = loading1 type="info" loading-text="提交中" >提交</van-button>
     </ul>
   </div>
 </template>
@@ -28,33 +29,44 @@ export default {
   name: "addGoods",
   data(){
     return({
-      text:''
+      text:'',
+      imgName:'',
+      file:null,
+      goodsname:'',
+      goodstext:'',
+      goodsmoney:'',
+      loading1:false
     })
+  },
+  created(){
   }
   ,
-  // config = { headers: { 'Content-Type': 'multipart/form-data' }}
-  // axios.post('serverUrl', formDate, config).then(res => { console.log(res) }) .catch(err => { console.log(err) })
-  methods:{
+    methods:{
     async onRead(file){
+      this.file = file
+    },
+    async submit(){
       var fromdata = new FormData()
-
-      console.log(file);
-      fromdata.append('file', file.file)
-      fromdata.append('tel','15302006236')
-      console.log(file.file)
-      console.log(fromdata);
-      // this.$http.post('/allorder/upload', fromdata, {
-      //   headers: {
-      //     'content-type': 'multipart/form-data'
-      //   }
-
+      fromdata.append('file', this.file.file)
+      fromdata.append('tel',this.$store.state.tel)
+      fromdata.append('goodsname',this.goodsname)
+      fromdata.append('goodstext',this.goodstext)
+      fromdata.append('goodsmoney',this.goodsmoney)
       var datas = await this.$http
       .post(
-        urlqing+"/s",
+        urlqing+"/CreateSellOrder",
         fromdata,
         {headers:{'content-type': 'multipart/form-data'}}
       )
-      console.log(datas,'datass');
+      if(datas.code==1){
+        alert(datas.data.msg)//创建成功
+      }else{
+        alert(datas.data.msg)//创建失败
+      }
+    },
+    closex(){
+      console.log(1);
+      this.$emit('closeshow',false)
     }
   }
 };
@@ -67,5 +79,15 @@ export default {
   position: fixed;
   top: 30%;
   left: 25rem;
+  .close-box{
+    width: 100%;
+    height: 20px;
+    .close-x{
+      float: right;
+      width: 20px;
+      height: 20px;
+      background-color: antiquewhite;
+    }
+  }
 }
 </style>
