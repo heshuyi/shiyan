@@ -12,12 +12,14 @@
             名字:<span>{{ index.goodsname }}</span>
           </div>
           <div class="text">描述:{{ index.text }}</div>
-          <div class="endtime">时间:{{index.endtime}}</div>
+          <div class="endtime">时间:{{ index.endtime }}</div>
           <div class="money">
-            <div class="startmoney">发布:{{index.money}}￥</div>
-            <div class="endmoney">现在:{{index.money}}￥</div>
+            <div class="startmoney">发布:{{ index.money }}￥</div>
+            <div class="endmoney">现在:{{ index.money }}￥</div>
           </div>
-          <DIV @click="addtoshop(index.goodsid)" class="add-to-shop">添加购物单</DIV>
+          <DIV @click="addtoshop(index.goodsid)" class="add-to-shop">
+            添加购物单
+          </DIV>
         </li>
       </ul>
     </div>
@@ -53,20 +55,17 @@ export default {
       });
       this.goods = data.data.data;
     },
-    async addtoshop(goodsid){
-      var datas = await this.$http.post(urlqing +'/addtoshopcar',
-      {
-        tel:this.$store.state.tel,
-        goodsid:goodsid
-      })
-      if(datas.data.code==0){
+    async addtoshop(goodsid) {
+      var datas = await this.$http.post(urlqing + "/addtoshopcar", {
+        tel: this.$store.state.tel,
+        goodsid: goodsid,
+      });
+      if (datas.data.code == 0) {
         Toast.fail(datas.data.msg);
-      }else{
-      Toast.success(datas.data.msg);
+      } else {
+        Toast.success(datas.data.msg);
       }
-
-
-    }
+    },
   },
 };
 </script>
@@ -93,7 +92,6 @@ export default {
   }
   .show-box {
     width: 750rem;
-    // height:100vh;
     background-color: blue;
     margin-bottom: 100rem;
     overflow-y: auto;
@@ -137,23 +135,23 @@ export default {
         .text::-webkit-scrollbar {
           width: 0;
         }
-        .endtime{
+        .endtime {
           // background-color: aliceblue;
           height: 50rem;
           font-size: 40rem;
         }
-        .money{
+        .money {
           height: 50rem;
           // background-color: aliceblue;
           font-size: 40rem;
-          .startmoney{
+          .startmoney {
             float: left;
           }
-          .endmoney{
+          .endmoney {
             float: right;
           }
         }
-        .add-to-shop{
+        .add-to-shop {
           height: 80rem;
           background-color: aliceblue;
           text-align: center;

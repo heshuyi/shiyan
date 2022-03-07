@@ -14,7 +14,6 @@
           <div class="show-box-endtime"><span>结束时间:{{index.endtime}}</span></div>
           <span class="startmoney">初始价格:{{index.money}}</span>
           <span class="endmoney">现在价格:0</span>
-          
         </li>
       </ul>
     </div>
