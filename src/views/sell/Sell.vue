@@ -1,6 +1,6 @@
 <template>
   <div class="sell">
-    <Addsell v-if="addsellshow" closeaddsell v-on:closeshow = 'closeaddsell'/>
+    <Addsell class="add-sell" v-if="addsellshow" closeaddsell v-on:closeshow = 'closeaddsell'/>
     <div ref="titlebox" class="title-box">
       <span>我的售卖</span>
       <div @click="addsell">+</div>
@@ -50,15 +50,17 @@ export default {
     addsell(){
       this.addsellshow = true
     },
-    closeaddsell(value){
-      this.addsellshow = value
-    },
     async getsellgoods(){
       var tel = this.$store.state.tel
       var datas =await this.$http.post(urlqing+'/getgoods',{tel:tel})
       this.sellGoods = datas.data.data
       console.log(datas.data.data);
-    }
+    },
+    closeaddsell(value){
+      this.addsellshow = value
+      this.$options.methods.getsellgoods()
+    },
+    
   }
 }
 </script>
@@ -66,6 +68,9 @@ export default {
 .sell{
   width: 750rem;
   overflow-x: hidden;
+  .add-sell{
+    z-index: 100;
+  }
   .title-box{
     width: 750rem;
     height: 100rem;

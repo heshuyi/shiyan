@@ -25,6 +25,7 @@
 </template>
 <script>
 import { url as urlqing } from "../../js/url";
+import { Toast } from "vant";
 export default {
   name: "Purchase",
   data() {
@@ -53,13 +54,18 @@ export default {
       this.goods = data.data.data;
     },
     async addtoshop(goodsid){
-      console.log(111);
       var datas = await this.$http.post(urlqing +'/addtoshopcar',
       {
         tel:this.$store.state.tel,
         goodsid:goodsid
       })
-      console.log(datas);
+      if(datas.data.code==0){
+        Toast.fail(datas.data.msg);
+      }else{
+      Toast.success(datas.data.msg);
+      }
+
+
     }
   },
 };
