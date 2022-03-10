@@ -1,6 +1,6 @@
 <template>
   <div class="sell">
-    <Addsell class="add-sell" v-if="addsellshow" closeaddsell v-on:closeshow = 'closeaddsell'/>
+    <Addsell class="add-sell" v-if="addsellshow"  v-on:closeshow = 'closeaddsell'/>
     <div ref="titlebox" class="title-box">
       <span>我的售卖</span>
       <div @click="addsell">+</div>
@@ -57,7 +57,9 @@ export default {
     },
     closeaddsell(value){
       this.addsellshow = value
-      this.$options.methods.getsellgoods()
+      this.$nextTick(() => {
+        this.getsellgoods()
+      });
     },
     
   }
