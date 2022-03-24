@@ -37,6 +37,7 @@ export default {
     };
   },
   created() {
+    console.log(11);
     this.getgoods();
   },
   mounted() {
@@ -49,6 +50,7 @@ export default {
   },
   methods: {
     async getgoods() {
+      console.log(333);
       var data = await this.$http.post(urlqing + "/getsellgoods", {
         tel: this.$store.state.tel,
         search: this.searchValue,

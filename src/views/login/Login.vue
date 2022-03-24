@@ -47,7 +47,6 @@
 </template>
 <script>
 import {url as urlqing} from '../../js/url'
-
 import { Toast } from "vant";
 import { areaList } from "@vant/area-data";
 export default {
@@ -67,6 +66,7 @@ export default {
   },
   created(){
     console.log(urlqing);
+    console.log(222);
   }
   ,
   methods: {

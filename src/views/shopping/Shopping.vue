@@ -1,10 +1,13 @@
 <template>
   <div class="buy-box">
     <div ref="titlebox" class="title-box">
-      <span>我参加的拍卖</span>
+      <span>我参加的拍卖123</span>
     </div>
     <div ref="showbox" class="show-box">
-      
+      <ul>
+        <!-- <li v-for=""></li> -->
+        123
+      </ul>
     </div>
   </div>
 </template>
@@ -23,9 +26,11 @@ export default {
     }
   }, 
   created(){
-    
+    console.log(11);
+    this.getMineBuyList()
   },
   mounted(){
+    console.log(2);
     var clientHight = document.body.clientHight ||document.documentElement.clientHeight;
     var showbox = this.$refs.showbox;
     var findbox = this.$refs.titlebox;
@@ -34,7 +39,10 @@ export default {
   },
   methods:{
     async getMineBuyList(){
-      let lists = this.$http.post(urlqing+'/getAuctionList',{tel:tel}) 
+      let tel=this.$store.state.tel
+      console.log(11111);
+      let lists = await this.$http.post(urlqing+'/getAuctionList',{tel:tel})
+      console.log(lists);
     }
   }
 }
