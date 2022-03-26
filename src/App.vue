@@ -4,8 +4,9 @@
   </div>
 </template>
 <style>
-#app{
+#app {
   width: 750rem;
   overflow-x: hidden;
+  font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
 }
 </style>

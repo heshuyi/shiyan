@@ -18,7 +18,7 @@ export default {
     };
   },
   created() {
-    this.initWebSocket();
+    // this.initWebSocket();
     this.$http.get(urlqing + "/api11", { params: { token: 1 } }).then((res) => {
       console.log(res);
     });
@@ -29,7 +29,7 @@ export default {
   destroyed() {
     // socket.close()
     console.log(1);
-    this.websocket.close();
+    // this.websocket.close();
   },
   methods: {
     tuichu() {
