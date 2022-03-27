@@ -14,16 +14,6 @@
                 label="产品名"
                 placeholder="请输入用户名"
               />
-              <!-- <van-field
-                    v-model="message"
-                    rows="2"
-                    autosize
-                    label="留言"
-                    type="textarea"
-                    maxlength="50"
-                    placeholder="请输入留言"
-                    show-word-limit
-                  /> -->
             </div>
           </div>
         </li>
@@ -66,12 +56,12 @@ export default {
     this.getMineBuyList();
   },
   mounted() {
-    console.log(2);
     var clientHight =
       document.body.clientHight || document.documentElement.clientHeight;
     var showbox = this.$refs.showbox;
     var findbox = this.$refs.titlebox;
     findbox = findbox.offsetHeight;
+    console.log(clientHight,findbox);
     showbox.style.height = clientHight - findbox * 2 + "px";
   },
   methods: {
@@ -90,18 +80,10 @@ export default {
   width: 750rem;
   overflow-x: hidden;
   .title-box {
-    width: 750rem;
     height: 46px;
-    // background-color: brown;
-    box-sizing: border-box;
-    text-align: center;
-    span {
-      font-size: 30px;
-    }
   }
   .show-box {
     width: 100%;
-    // background-color: blue;
     margin-bottom: 100rem;
     overflow-y: auto;
     overflow-x: hidden;

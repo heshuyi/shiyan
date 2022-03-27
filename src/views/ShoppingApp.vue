@@ -1,35 +1,20 @@
 <template>
   <div class="app-box">
     <router-view />
-    <div class="bottom-box">
-      <router-link class="router-link" to="/purchase">购买</router-link>
-      <router-link class="router-link" to="/sell">卖</router-link>
-      <router-link class="router-link" to="/shopping">订单</router-link>
-      <router-link class="router-link" to="/mine">我</router-link>
-    </div>
-    
+    <van-tabbar route>
+      <van-tabbar-item icon="home-o" to="/purchase"> 购买 </van-tabbar-item>
+      <van-tabbar-item icon="search" to="/sell"> 出售 </van-tabbar-item>
+      <van-tabbar-item icon="friends-o" to="/shopping">拍卖</van-tabbar-item>
+      <van-tabbar-item icon="setting-o" to="/mine">我的</van-tabbar-item>
+    </van-tabbar>
   </div>
 </template>
 <script>
 export default {
-  name:'ShoppingApp'
-}
+  name: "ShoppingApp",
+};
 </script>
 <style lang="less" scoped>
-.app-box{
-  .bottom-box{
-    width: 750rem;
-    height: 100rem;
-    background-color: violet;
-    position: fixed;
-    bottom: 0;
-    .router-link{
-      display: inline-block;
-      height: 80rem;
-      width: 100rem;
-      background-color: turquoise;
-      margin: 10rem 43.75rem;
-    }
-  }
+.app-box {
 }
 </style>

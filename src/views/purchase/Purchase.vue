@@ -1,10 +1,20 @@
 <template>
   <div class="purchase">
-    <div ref="findbox" class="find-box">
-      <input v-model="searchValue" type="text" />
-      <span @click="getgoods">搜索</span>
-    </div>
-    <div ref="showbox" class="show-box">
+    <SearchBox v-if="searchBool" v-on:closeSearch='closeSearch' />
+    <van-search
+      class="find-box"
+      shape="round"
+      show-action
+      label="商品"
+      placeholder="请输入搜索关键词"
+      @click-input="toSearch"
+    >
+    <!-- v-model="searchValue" -->
+      <template #action>
+        <div @click="getgoods">搜索</div>
+      </template>
+    </van-search>
+    <div ref="showbox" class="show-box" >
       <ul>
         <li v-for="index in goods" :key="index.key">
           <img :src="index.imgflie" alt="" />
@@ -28,29 +38,38 @@
 <script>
 import { url as urlqing } from "../../js/url";
 import { Toast } from "vant";
+import SearchBox from './SearchBox.vue'
 export default {
   name: "Purchase",
+  components:{
+    SearchBox
+  },
   data() {
     return {
       searchValue: "",
       goods: [],
+      searchBool:false
     };
   },
   created() {
-    console.log(11);
     this.getgoods();
   },
   mounted() {
     var clientHight =
       document.body.clientHight || document.documentElement.clientHeight;
     var showbox = this.$refs.showbox;
-    var findbox = this.$refs.findbox;
-    findbox = findbox.offsetHeight;
-    showbox.style.height = clientHight - findbox * 2 + "px";
+    showbox.style.height = clientHight - 106 + "px";
   },
   methods: {
+    toSearch(){
+      this.searchBool = true
+    },
+    closeSearch(data){
+      console.log(data);
+      this.searchBool = false
+    },
     async getgoods() {
-      console.log(333);
+      console.log('执行getgoods');
       var data = await this.$http.post(urlqing + "/getsellgoods", {
         tel: this.$store.state.tel,
         search: this.searchValue,
@@ -76,35 +95,31 @@ export default {
   width: 750rem;
   overflow-x: hidden;
   .find-box {
-    width: 500rem;
-    height: 100rem;
-    background-color: brown;
-    margin: 0 auto;
-    box-sizing: border-box;
-    // line-height: 100rem;
-    input {
-      width: 350rem;
-      margin: 25rem 20rem;
-    }
-    span {
-      font-size: 30rem;
-      background-color: burlywood;
-      border-radius: 30%;
+    height: 56px;
+    color: #1989fa !important;
+    background-color: rgba(rgb(63, 45, 45), green, blue, 0.1) !important;
+    .select-box{
+      position: relative;
+      left: 30px;
     }
   }
+
   .show-box {
     width: 750rem;
-    background-color: blue;
-    margin-bottom: 100rem;
+    margin-bottom: 50px;
     overflow-y: auto;
     overflow-x: hidden;
+    // background-color: red;
+    background-color: rgba(102, 102, 102, 0);
     ul {
       li {
         position: relative;
         height: 400rem;
         margin: 20rem;
-        background-color: aqua;
+        background-color: white;
         position: relative;
+        border-radius: 5px;
+        overflow: hidden;
         img {
           width: 200rem;
           height: 200rem;
@@ -154,14 +169,23 @@ export default {
           }
         }
         .add-to-shop {
+          margin-top: 10rem;
           height: 80rem;
-          background-color: aliceblue;
+          // background-color: rgb(20, 134, 233);
+          border: 1px solid #1989fa;
+          color: #1989fa;
           text-align: center;
           line-height: 80rem;
           font-size: 50rem;
+          border-radius: 5px;
         }
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
       }
     }
+  }
+  .show-box::-webkit-scrollbar {
+    display: none;
   }
 }
 </style>
