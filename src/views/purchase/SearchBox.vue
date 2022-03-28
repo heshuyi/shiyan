@@ -22,16 +22,16 @@
         <div
           class="history-search-boxs-tag"
           v-for="(i, items) in a"
-          :key="i.name + items"
+          :key="i.historyName + items"
         >
           <van-tag
-            v-if="i.bool"
+            v-if="i.historyBool"
             size="large"
             round
             type="primary"
-            @close="close(i.name)"
+            @close="close(i.historyName)"
           >
-            {{ i.name }}
+            {{ i.historyName }}
           </van-tag>
         </div>
       </div>
@@ -41,28 +41,41 @@
 
 <script>
 import "../../fonts/iconfont.css";
+import {url} from '../../js/url'
 export default {
   name: "SearchBox",
   data() {
     return {
       inputValue: "",
-      a: [
-        {
-          name:12,
-          bool:true
-        }
-      ],
+      a: null,
     };
   },
+  created(){
+    this.getSearchList()
+  },
   methods: {
+    async getSearchList(){
+      let tel = this.$store.state.tel
+      var datas = await this.$http.post(url + "/historySearch", { tel: tel });
+      let data = datas.data
+      if(data.code==1){
+        this.a = data.data
+      }else{
+        alert(data.msg)
+      }
+    },
     onCancel() {
       this.$emit('closeSearch','123')
     },
-    onSearch() {
-      console.log(2);
-    },
-    close(a) {
-      console.log(a);
+    async onSearch() {
+      let tel = this.$store.state.tel
+      if(this.a.length==10 && this.inputValue!=''){
+        this.$http.post(url+'/addHistotyValue',{})
+      }else{
+        console.log(2);
+      }
+      this.$emit('getsgoods',this.inputValue)
+      this.$emit('closeSearch','123')
     },
   },
 };

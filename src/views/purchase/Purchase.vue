@@ -1,6 +1,6 @@
 <template>
   <div class="purchase">
-    <SearchBox v-if="searchBool" v-on:closeSearch='closeSearch' />
+    <SearchBox v-if="searchBool" v-on:getsgoods="getgoods" v-on:closeSearch='closeSearch' />
     <van-search
       class="find-box"
       shape="round"
@@ -8,10 +8,11 @@
       label="商品"
       placeholder="请输入搜索关键词"
       @click-input="toSearch"
+      v-model="searchValue"
     >
     <!-- v-model="searchValue" -->
       <template #action>
-        <div @click="getgoods">搜索</div>
+        <div >搜索</div>
       </template>
     </van-search>
     <div ref="showbox" class="show-box" >
@@ -68,13 +69,17 @@ export default {
       console.log(data);
       this.searchBool = false
     },
-    async getgoods() {
+    async getgoods(goodsValue) {
       console.log('执行getgoods');
       var data = await this.$http.post(urlqing + "/getsellgoods", {
         tel: this.$store.state.tel,
-        search: this.searchValue,
+        search: goodsValue,
       });
       this.goods = data.data.data;
+      this.searchValue = goodsValue
+      if(data.data.data.length==0){
+        alert('无结果')
+      }
     },
     async addtoshop(goodsid) {
       var datas = await this.$http.post(urlqing + "/addtoshopcar", {
