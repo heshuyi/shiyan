@@ -16,7 +16,7 @@
     <div class="history-search">
       <div class="history-search-title">
         <span class="history-text">历史搜索</span>
-        <div class="iconfont icon-shanchu laji"></div>
+        <div class="iconfont icon-shanchu laji" @click="delHistory"></div>
       </div>
       <div class="history-search-boxs">
         <div
@@ -29,7 +29,7 @@
             size="large"
             round
             type="primary"
-            @close="close(i.historyName)"
+            @click="buttenHistory(i)"
           >
             {{ i.historyName }}
           </van-tag>
@@ -41,7 +41,7 @@
 
 <script>
 import "../../fonts/iconfont.css";
-import {url} from '../../js/url'
+import { url } from "../../js/url";
 export default {
   name: "SearchBox",
   data() {
@@ -50,33 +50,59 @@ export default {
       a: null,
     };
   },
-  created(){
-    this.getSearchList()
+  created() {
+    this.getSearchList();
   },
   methods: {
-    async getSearchList(){
-      let tel = this.$store.state.tel
+    async getSearchList() {
+      let tel = this.$store.state.tel;
       var datas = await this.$http.post(url + "/historySearch", { tel: tel });
-      let data = datas.data
-      if(data.code==1){
-        this.a = data.data
-      }else{
-        alert(data.msg)
+      let data = datas.data;
+      if (data.code == 1) {
+        this.a = data.data;
+      } else {
+        alert(data.msg);
       }
     },
     onCancel() {
-      this.$emit('closeSearch','123')
+      this.$emit("closeSearch", "123");
     },
     async onSearch() {
-      let tel = this.$store.state.tel
-      if(this.a.length==10 && this.inputValue!=''){
-        this.$http.post(url+'/addHistotyValue',{})
-      }else{
-        console.log(2);
+      let tel = this.$store.state.tel;
+      var num = 1;
+      let data;
+      if (this.a.length == 0) {
+        num = 1;
+      } else {
+        num = this.a[0].num + 1;
       }
-      this.$emit('getsgoods',this.inputValue)
-      this.$emit('closeSearch','123')
+      if (this.inputValue != "") {
+        data = await this.$http.post(url + "/addHistoryValue", {
+          tel: tel,
+          num: num,
+          value: this.inputValue,
+        });
+        if (data.data.code == 0) {
+          alert("出现错误重试");
+        }
+      }
+
+      this.$emit("getsgoods", this.inputValue);
+      this.$emit("closeSearch", "123");
     },
+    async delHistory() {
+      console.log(1);
+      let tel = this.$store.state.tel;
+      let d = await this.$http.post(url + "/delHistoryValue", { tel: tel });
+      if(d.data.code ==1){
+        this.getSearchList()
+      }
+    },
+    async buttenHistory(i){
+      console.log(i.historyName);
+      this.$emit("getsgoods", i.historyName);
+      this.$emit("closeSearch", "123");
+    }
   },
 };
 </script>
@@ -88,29 +114,28 @@ export default {
   position: fixed;
   background-color: white;
   z-index: 1000;
-  .close{
+  .close {
     margin-right: 10px;
   }
-  .history-search{
-    .history-text{
+  .history-search {
+    .history-text {
       margin: 10px;
       font-size: 15px;
     }
-    .laji{
+    .laji {
       float: right;
       font-size: 30px;
       margin-right: 5px;
     }
     .history-search-boxs {
-    display: flex;
-    flex-wrap: wrap;
-    
-    .history-search-boxs-tag {
-      margin: 20px 0 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+
+      .history-search-boxs-tag {
+        margin: 20px 0 0 20px;
+      }
     }
   }
-  }
-  
 }
 </style>
 

@@ -1,6 +1,10 @@
 <template>
   <div class="purchase">
-    <SearchBox v-if="searchBool" v-on:getsgoods="getgoods" v-on:closeSearch='closeSearch' />
+    <SearchBox
+      v-if="searchBool"
+      v-on:getsgoods="getgoods"
+      v-on:closeSearch="closeSearch"
+    />
     <van-search
       class="find-box"
       shape="round"
@@ -10,28 +14,33 @@
       @click-input="toSearch"
       v-model="searchValue"
     >
-    <!-- v-model="searchValue" -->
+      <!-- v-model="searchValue" -->
       <template #action>
-        <div >搜索</div>
+        <div>搜索</div>
       </template>
     </van-search>
-    <div ref="showbox" class="show-box" >
+    <div ref="showbox" class="show-box">
       <ul>
-        <li v-for="index in goods" :key="index.key">
-          <img :src="index.imgflie" alt="" />
-          <div class="name">
-            名字:<span>{{ index.goodsname }}</span>
-          </div>
-          <div class="text">描述:{{ index.text }}</div>
-          <div class="endtime">时间:{{ index.endtime }}</div>
-          <div class="money">
-            <div class="startmoney">发布:{{ index.money }}￥</div>
-            <div class="endmoney">现在:{{ index.money }}￥</div>
-          </div>
-          <DIV @click="addtoshop(index.goodsid)" class="add-to-shop">
-            添加购物单
-          </DIV>
-        </li>
+        <template v-if="goods.length == 0 ? true : false">
+          <van-empty image="search" description="查询无结果" />
+        </template>
+        <template v-if="goods.length > 0 ? true : false">
+          <li v-for="index in goods" :key="index.key">
+            <img :src="index.imgflie" alt="" />
+            <div class="name">
+              名字:<span>{{ index.goodsname }}</span>
+            </div>
+            <div class="text">描述:{{ index.text }}</div>
+            <div class="endtime">时间:{{ index.endtime }}</div>
+            <div class="money">
+              <div class="startmoney">发布:{{ index.money }}￥</div>
+              <div class="endmoney">现在:{{ index.money }}￥</div>
+            </div>
+            <DIV @click="addtoshop(index.goodsid)" class="add-to-shop">
+              添加购物单
+            </DIV>
+          </li>
+        </template>
       </ul>
     </div>
   </div>
@@ -39,17 +48,17 @@
 <script>
 import { url as urlqing } from "../../js/url";
 import { Toast } from "vant";
-import SearchBox from './SearchBox.vue'
+import SearchBox from "./SearchBox.vue";
 export default {
   name: "Purchase",
-  components:{
-    SearchBox
+  components: {
+    SearchBox,
   },
   data() {
     return {
       searchValue: "",
       goods: [],
-      searchBool:false
+      searchBool: false,
     };
   },
   created() {
@@ -62,24 +71,21 @@ export default {
     showbox.style.height = clientHight - 106 + "px";
   },
   methods: {
-    toSearch(){
-      this.searchBool = true
+    toSearch() {
+      this.searchBool = true;
     },
-    closeSearch(data){
+    closeSearch(data) {
       console.log(data);
-      this.searchBool = false
+      this.searchBool = false;
     },
     async getgoods(goodsValue) {
-      console.log('执行getgoods');
+      console.log("执行getgoods");
       var data = await this.$http.post(urlqing + "/getsellgoods", {
         tel: this.$store.state.tel,
         search: goodsValue,
       });
       this.goods = data.data.data;
-      this.searchValue = goodsValue
-      if(data.data.data.length==0){
-        alert('无结果')
-      }
+      this.searchValue = goodsValue;
     },
     async addtoshop(goodsid) {
       var datas = await this.$http.post(urlqing + "/addtoshopcar", {
@@ -103,7 +109,7 @@ export default {
     height: 56px;
     color: #1989fa !important;
     background-color: rgba(rgb(63, 45, 45), green, blue, 0.1) !important;
-    .select-box{
+    .select-box {
       position: relative;
       left: 30px;
     }

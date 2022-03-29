@@ -1,8 +1,6 @@
 <template>
   <div class="buy-box">
-    <div ref="titlebox" class="title-box">
-      <van-nav-bar title="购物车" />
-    </div>
+      <van-nav-bar class="title-box" title="购物车" />
     <div ref="showbox" class="show-box">
       <ul>
         <li class="goods-list" v-for="i in buys" :key="i">
@@ -59,10 +57,8 @@ export default {
     var clientHight =
       document.body.clientHight || document.documentElement.clientHeight;
     var showbox = this.$refs.showbox;
-    var findbox = this.$refs.titlebox;
-    findbox = findbox.offsetHeight;
-    console.log(clientHight,findbox);
-    showbox.style.height = clientHight - findbox * 2 + "px";
+    console.log(clientHight);
+    showbox.style.height = clientHight - 106 + "px";
   },
   methods: {
     async getMineBuyList() {
@@ -80,7 +76,7 @@ export default {
   width: 750rem;
   overflow-x: hidden;
   .title-box {
-    height: 46px;
+    height: 56px;
   }
   .show-box {
     width: 100%;

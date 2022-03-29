@@ -65,7 +65,7 @@ export default {
       }
     },
     closex(){
-      console.log(1);
+      console.log(12);
       this.$emit('closeshow',false)
     }
   }
