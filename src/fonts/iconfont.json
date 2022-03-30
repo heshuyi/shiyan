@@ -1,10 +1,17 @@
 {
   "id": "2998628",
-  "name": "no name",
+  "name": "毕业设计",
   "font_family": "iconfont",
   "css_prefix_text": "icon-",
   "description": "",
   "glyphs": [
+    {
+      "icon_id": "21732494",
+      "name": "持续上涨",
+      "font_class": "chixushangzhang",
+      "unicode": "e740",
+      "unicode_decimal": 59200
+    },
     {
       "icon_id": "108776",
       "name": "删除",

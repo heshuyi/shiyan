@@ -1,6 +1,6 @@
 <template>
   <div class="purchase">
-    <ShowBox v-if="showBoxBool" />
+    <ShowBox v-if="showBoxBool" v-on:closeShow='closeShowBox' v-on:toShopCar="addtoshop" v-bind:showValue="showValueObj" />
     <SearchBox
       v-if="searchBool"
       v-on:getsgoods="getgoods"
@@ -26,10 +26,17 @@
           <van-empty image="search" description="查询无结果" />
         </template>
         <template v-if="goods.length > 0 ? true : false">
-          <li class="onclicktarget" v-for="(index,item) in goods" :hsy='item' :key="index.key">
+          <li
+            class="onclicktarget"
+            v-for="(index, item) in goods"
+            :hsy="item"
+            :key="index.key"
+          >
             <img :src="index.imgflie" alt="" />
             <div class="name">
-              名字:<span :aiao='index.goodsname+ 123 '>{{ index.goodsname }}</span>
+              名字:<span :aiao="index.goodsname + 123">{{
+                index.goodsname
+              }}</span>
             </div>
             <div class="text">描述:{{ index.text }}</div>
             <div class="endtime">时间:{{ index.endtime }}</div>
@@ -62,8 +69,9 @@ export default {
       searchValue: "",
       goods: [],
       searchBool: false,
-      showBoxValue:0,
-      showBoxBool:false
+      showBoxValue: 0,
+      showBoxBool: false,
+      showValueObj: 12,
     };
   },
   created() {
@@ -75,23 +83,24 @@ export default {
     var showbox = this.$refs.showbox;
     showbox.style.height = clientHight - 106 + "px";
     let c = document.getElementById("uls");
-    c.addEventListener("click", (e) => {
-      console.log(e);
-      let d = e.target
-      let num = 0
-      function findLi(d){
-        console.log(d);
-        console.log(d.className);
-        if(d.className!='onclicktarget'){
-          findLi(d.parentElement)}
-        else{
-          num = d.getAttribute("hsy")
-          }
-      }
-      findLi(d)
-      this.showBoxValue = num
-    });
     
+
+    c.addEventListener("click", (e) => {
+      let d = e.target;
+      let num = 0;
+      function findLi(d) {
+        if (d.className != "onclicktarget") {
+          findLi(d.parentElement);
+        } else {
+          num = d.getAttribute("hsy");
+        }
+      }
+      if (d.className != "add-to-shop") {
+        findLi(d);
+        this.showBoxBool = true;
+        this.showValueObj = this.goods[num];
+      }
+    });
   },
   methods: {
     toSearch() {
@@ -101,24 +110,38 @@ export default {
       console.log(data);
       this.searchBool = false;
     },
+    closeShowBox(){
+      this.showBoxBool = false
+    }
+    ,
     async getgoods(goodsValue) {
       console.log("执行getgoods");
       var data = await this.$http.post(urlqing + "/getsellgoods", {
         tel: this.$store.state.tel,
         search: goodsValue,
       });
-      this.goods = data.data.data;
+      let datas = data.data.data
+      datas = datas.reverse()
+      this.goods = datas;
       this.searchValue = goodsValue;
+      this.$nextTick(() => {
+      this.showBoxBool = true;
+      console.log(this.goods[0]);
+      this.showValueObj = this.goods[0];
+    });
     },
     async addtoshop(goodsid) {
+      console.log(goodsid);
       var datas = await this.$http.post(urlqing + "/addtoshopcar", {
         tel: this.$store.state.tel,
         goodsid: goodsid,
       });
       if (datas.data.code == 0) {
         Toast.fail(datas.data.msg);
+        alert(datas.data.msg)
       } else {
-        Toast.success(datas.data.msg);
+        alert(datas.data.msg)
+        // Toast.success(datas.data.msg);
       }
     },
   },
