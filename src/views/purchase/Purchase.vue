@@ -1,5 +1,6 @@
 <template>
   <div class="purchase">
+    <ShowBox v-if="showBoxBool" />
     <SearchBox
       v-if="searchBool"
       v-on:getsgoods="getgoods"
@@ -20,15 +21,15 @@
       </template>
     </van-search>
     <div ref="showbox" class="show-box">
-      <ul>
+      <ul id="uls">
         <template v-if="goods.length == 0 ? true : false">
           <van-empty image="search" description="查询无结果" />
         </template>
         <template v-if="goods.length > 0 ? true : false">
-          <li v-for="index in goods" :key="index.key">
+          <li class="onclicktarget" v-for="(index,item) in goods" :hsy='item' :key="index.key">
             <img :src="index.imgflie" alt="" />
             <div class="name">
-              名字:<span>{{ index.goodsname }}</span>
+              名字:<span :aiao='index.goodsname+ 123 '>{{ index.goodsname }}</span>
             </div>
             <div class="text">描述:{{ index.text }}</div>
             <div class="endtime">时间:{{ index.endtime }}</div>
@@ -49,16 +50,20 @@
 import { url as urlqing } from "../../js/url";
 import { Toast } from "vant";
 import SearchBox from "./SearchBox.vue";
+import ShowBox from "./ShowBox.vue";
 export default {
   name: "Purchase",
   components: {
     SearchBox,
+    ShowBox,
   },
   data() {
     return {
       searchValue: "",
       goods: [],
       searchBool: false,
+      showBoxValue:0,
+      showBoxBool:false
     };
   },
   created() {
@@ -69,6 +74,24 @@ export default {
       document.body.clientHight || document.documentElement.clientHeight;
     var showbox = this.$refs.showbox;
     showbox.style.height = clientHight - 106 + "px";
+    let c = document.getElementById("uls");
+    c.addEventListener("click", (e) => {
+      console.log(e);
+      let d = e.target
+      let num = 0
+      function findLi(d){
+        console.log(d);
+        console.log(d.className);
+        if(d.className!='onclicktarget'){
+          findLi(d.parentElement)}
+        else{
+          num = d.getAttribute("hsy")
+          }
+      }
+      findLi(d)
+      this.showBoxValue = num
+    });
+    
   },
   methods: {
     toSearch() {

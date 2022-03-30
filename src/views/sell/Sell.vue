@@ -12,7 +12,7 @@
       class="title"
     />
     <div ref="showbox" class="show-box">
-      <ul>
+      <ul >
         <li class="goods-list" v-for="i in sellGoods" :key="i.goodsid">
           <div class="goods-box">
             <img class="goods-img" :src="i.imgflie" alt="" />
@@ -20,13 +20,13 @@
               <div class="goods-describe-box">
                 <div class="goods-describe-box-name">产品名字:</div>
                 <div class="goods-describe-box-value">
-                  {{i.goodsname}}
+                  {{ i.goodsname }}
                 </div>
               </div>
               <div class="goods-describe-box">
                 <div class="goods-describe-box-name">产品描述:</div>
                 <div class="goods-describe-box-value">
-                  {{i.text}}
+                  {{ i.text }}
                 </div>
               </div>
             </div>
@@ -118,23 +118,23 @@ export default {
             0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
         .goods-describe::-webkit-scrollbar {
-            width: 0;
-          }
+          width: 0;
+        }
         .goods-describe {
           display: inline-block;
           vertical-align: top;
           overflow-y: auto;
-          
+          width: 400rem;
+          height: 300rem;
+          // background-color: red;
           .goods-describe-box {
-            width: 400rem;
-            height: 300rem;
             overflow-y: auto;
             font-size: 15px;
-            background-color: aquamarine;
+            // background-color: aquamarine;
             .goods-describe-box-name {
               display: inline-block;
               width: 150rem;
-              background-color: aqua;
+              // background-color: aqua;
               vertical-align: top;
             }
             .goods-describe-box-value {
@@ -142,7 +142,7 @@ export default {
               width: 250rem;
               white-space: normal;
               word-break: break-all;
-              background-color: antiquewhite;
+              // background-color: antiquewhite;
             }
           }
         }
