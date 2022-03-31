@@ -3,15 +3,13 @@
       <van-nav-bar class="title-box" title="购物车" />
     <div ref="showbox" class="show-box">
       <ul>
-        <li class="goods-list" v-for="i in buys" :key="i">
+        <li class="goods-list" v-for="i in buys" :key="i.goodsId">
           <div class="goods-box">
             <img class="goods-img" :src="i.goodsImg" alt="" />
             <div class="goods-describe">
-              <van-field
-                class="goods-name"
-                label="产品名"
-                placeholder="请输入用户名"
-              />
+              <div><span>名字:</span><div>{{i.goodsName}}</div></div>
+              <div><span>goodsText:</span><div></div></div>
+              <div><span>fabuzhe</span><span></span></div>
             </div>
           </div>
         </li>
@@ -29,7 +27,8 @@ export default {
     return {
       buyList: [],
       buys: [
-        {
+        { 
+          goodsId:1,
           goodsName: "烧饼",
           goodsImg: "123", //照片
           goodsText: "描述",
@@ -38,7 +37,8 @@ export default {
           nowMoney: 120, //当前价格,
           upMoney: undefined,
         },
-        {
+        { 
+          goodsId:2,
           goodsName: "烧饼",
           goodsImg: "http://localhost:3001/img/15302006231-1643989432.jpeg", //照片
           goodsText: "描述",
@@ -66,7 +66,7 @@ export default {
       let lists = await this.$http.post(urlqing + "/getAuctionList", {
         tel: tel,
       });
-      lists;
+      console.log(lists);
     },
   },
 };

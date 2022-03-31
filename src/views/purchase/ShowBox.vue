@@ -1,12 +1,15 @@
 <template>
   <div class="showbox">
-    <div @click="closeShowBox">x</div>
+    <div class="close-box iconfont icon-fanhui" @click="closeShowBox"></div>
     <img class="goods-img" :src="showValue.imgflie" alt="" />
     <div class="van-hairline--bottom">
       <div class="money-box">
         <span class="money-old"> ￥{{ this.showValue.money }} </span>
-        <span class="money-new iconfont icon-chixushangzhang"> ￥123 </span>
+        <span  class="money-new iconfont icon-chixushangzhang"> ￥123 </span>
       </div>
+    </div>
+    <div class="name">
+      {{this.showValue.goodsname}}
     </div>
     <div class="van-hairline--bottom">
       <van-count-down
@@ -20,7 +23,7 @@
       <div class="text">&nbsp;&nbsp;&nbsp;&nbsp;{{ this.showValue.text }}</div>
     </div>
     <van-goods-action>
-      <van-goods-action-icon icon="shop-o" text="购物车" />
+      <van-goods-action-icon @click="toShopCar" icon="shop-o" text="购物车" />
       <van-goods-action-button
         color="#be99ff"
         type="warning"
@@ -68,6 +71,11 @@ export default {
     },
     closeShowBox(){
       this.$emit('closeShow')
+    },
+    toShopCar(){
+      console.log(11111);
+      this.closeShowBox()
+      this.$router.push('/shopping')
     }
   },
 };
@@ -79,9 +87,17 @@ export default {
   min-height: 100vh;
   background-color: white;
   z-index: 9999;
+  .close-box{
+    position: fixed;
+    top: 0;
+    margin: 8px;
+    font-size: 20px;
+        background-color: rgba(255, 255, 255, 0.075);
+  }
   .goods-img {
     width: 100%;
     height: 40vh;
+
   }
   .money-box {
     font-size: 30px;
@@ -94,6 +110,11 @@ export default {
       float: right;
       margin-right: 5px;
     }
+  }
+  .name{
+    margin: 10px;
+    font-size: 30px;
+    color: rgb(55, 80, 97);
   }
   .down-time {
     font-size: 30px;

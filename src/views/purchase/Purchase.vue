@@ -55,7 +55,7 @@
 </template>
 <script>
 import { url as urlqing } from "../../js/url";
-import { Toast } from "vant";
+// import { Toast } from "vant";
 import SearchBox from "./SearchBox.vue";
 import ShowBox from "./ShowBox.vue";
 export default {
@@ -124,11 +124,11 @@ export default {
       datas = datas.reverse()
       this.goods = datas;
       this.searchValue = goodsValue;
-      this.$nextTick(() => {
-      this.showBoxBool = true;
-      console.log(this.goods[0]);
-      this.showValueObj = this.goods[0];
-    });
+    //   this.$nextTick(() => {
+    //   this.showBoxBool = true;
+    //   console.log(this.goods[0]);
+    //   this.showValueObj = this.goods[0];
+    // });
     },
     async addtoshop(goodsid) {
       console.log(goodsid);
@@ -137,11 +137,9 @@ export default {
         goodsid: goodsid,
       });
       if (datas.data.code == 0) {
-        Toast.fail(datas.data.msg);
         alert(datas.data.msg)
       } else {
         alert(datas.data.msg)
-        // Toast.success(datas.data.msg);
       }
     },
   },
