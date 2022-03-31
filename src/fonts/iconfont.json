@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12720581",
+      "name": "查价格",
+      "font_class": "chajiage",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "21786414",
+      "name": "价格咨询",
+      "font_class": "jiagezixun",
+      "unicode": "e68b",
+      "unicode_decimal": 59019
+    },
+    {
       "icon_id": "21732494",
       "name": "持续上涨",
       "font_class": "chixushangzhang",

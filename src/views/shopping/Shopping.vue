@@ -5,12 +5,23 @@
       <ul>
         <li class="goods-list" v-for="i in buys" :key="i.goodsId">
           <div class="goods-box">
-            <img class="goods-img" :src="i.goodsImg" alt="" />
+            <img class="goods-img" :src="i.imgflie" alt="" />
             <div class="goods-describe">
-              <div><span>名字:</span><div>{{i.goodsName}}</div></div>
-              <div><span>goodsText:</span><div></div></div>
-              <div><span>fabuzhe</span><span></span></div>
+              <div class="goods-describe-list"><span class="goods-name">名字:</span><div>{{i.goodsname}}</div></div>
+              <div class="goods-describe-list"><span class="goods-name">描述:</span><div>{{i.text}}</div></div>
+              <div class="goods-describe-list"><span class="goods-name">作者:</span><div>{{i.tel}}</div></div>
             </div>
+            <div class="moneys">
+              <div class="moneysdiv iconfont icon-jiagezixun">1</div>
+              <div class="moneysdiv iconfont icon-jiagezixun ">2</div>
+              <div class="moneysdiv iconfont icon-chixushangzhang">3</div>
+            </div>
+            <van-count-down :time="time" format="DD 天 HH 时 mm 分 ss 秒" />
+            <div class="jingpai">
+              <input class="inputs-goods" placeholder="请输入要竞拍的价格" type="number"  >
+              <van-button  class="chujia"  size="normal" @click="auctionGood(i)" >竞拍</van-button>
+            </div>
+            
           </div>
         </li>
       </ul>
@@ -25,29 +36,7 @@ export default {
   name: "Purchase",
   data() {
     return {
-      buyList: [],
-      buys: [
-        { 
-          goodsId:1,
-          goodsName: "烧饼",
-          goodsImg: "123", //照片
-          goodsText: "描述",
-          goodsMoney: 12, //初始价格
-          endTime: "2000-01-01 10:10:10",
-          nowMoney: 120, //当前价格,
-          upMoney: undefined,
-        },
-        { 
-          goodsId:2,
-          goodsName: "烧饼",
-          goodsImg: "http://localhost:3001/img/15302006231-1643989432.jpeg", //照片
-          goodsText: "描述",
-          goodsMoney: 12, //初始价格
-          endTime: "2000-01-01 10:10:10",
-          nowMoney: 120, //当前价格,
-          upMoney: undefined,
-        },
-      ],
+      buys: [],
     };
   },
   created() {
@@ -57,7 +46,6 @@ export default {
     var clientHight =
       document.body.clientHight || document.documentElement.clientHeight;
     var showbox = this.$refs.showbox;
-    console.log(clientHight);
     showbox.style.height = clientHight - 106 + "px";
   },
   methods: {
@@ -66,8 +54,14 @@ export default {
       let lists = await this.$http.post(urlqing + "/getAuctionList", {
         tel: tel,
       });
-      console.log(lists);
+      if(lists.data.code == 1){
+        this.buys = lists.data.data
+        console.log(this.buys);
+      }
     },
+    async auctionGood(i){
+      console.log(i);
+    }
   },
 };
 </script>
@@ -85,15 +79,14 @@ export default {
     overflow-x: hidden;
     .goods-list {
       width: 100%;
-      height: 500rem;
+      height: 600rem;
       display: flex;
       justify-content: center;
       align-items: center;
       // background-color: rgb(35, 96, 150);
       .goods-box {
         width: 700rem;
-        // margin: 0 auto;
-        height: 450rem;
+        height: 550rem;
         background-color: aliceblue;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
           0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -103,11 +96,54 @@ export default {
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
             0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
+        .moneys{
+          // height: 20rem;
+          width: 100%;
+          display: flex;
+          height: 70rem;
+          font-size: 50rem;
+          // background-color: red;
+          justify-content:space-between;
+          .moneysdiv{
+            display: inline-block;
+            font-size: 46rem;
+          }
+        }
+        .jingpai{
+          height: 80rem;
+          // background-color: aqua;
+          .inputs-goods{
+            width: 560rem;
+            height: 80rem;
+            display: inline-block;
+            border: none;
+            padding: 0;
+            font-size: 40rem;
+            margin-left: 5px;
+            border-radius: 5px;
+          }
+          .chujia{
+          background-color: azure;
+          float: right;
+          height: 70rem;
+          margin: 5rem;
+          border: 1px solid blue;
+        }
+        }
+        
         .goods-describe {
           display: inline-block;
           vertical-align: top;
-          .goods-name {
-            width: 400rem;
+          width: 400rem;
+          height: 300rem;
+          overflow: hidden;
+          font-size: 25rem;
+          .goods-describe-list {
+            max-height: 100rem;
+            overflow: hidden;
+            word-wrap: break-word;
+            word-break: break-all;
+            text-overflow:ellipsis;
           }
         }
       }
