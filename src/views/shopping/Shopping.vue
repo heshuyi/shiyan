@@ -17,7 +17,7 @@
     <van-nav-bar class="title-box" title="购物车" />
     <div ref="showbox" class="show-box">
       <ul>
-        <li class="goods-list" v-for="i in buys" :key="i.goodsId">
+        <li class="goods-list" v-for="(i, item) in buys" :key="i.goodsId">
           <div class="goods-box">
             <img class="goods-img" :src="i.imgflie" alt="" />
             <div class="goods-describe">
@@ -35,8 +35,12 @@
               </div>
             </div>
             <div class="moneys">
-              <div class="moneysdiv iconfont icon-jiagezixun">{{i.money}}</div>
-              <div class="moneysdiv iconfont icon-jiagezixun">2</div>
+              <div class="moneysdiv iconfont icon-jiagezixun">
+                {{ i.money }}
+              </div>
+              <div class="moneysdiv iconfont icon-jiagezixun">
+                {{ myGoodsListMoney[item].newMoney }}
+              </div>
               <div class="moneysdiv iconfont icon-chixushangzhang">3</div>
             </div>
             <van-count-down
@@ -68,11 +72,15 @@ export default {
       show: false,
       money: null,
       upGoodIs: null,
-      myGoodsMoney:[]
+      myGoodsMoney: [],
+      myGoodsListMoney: [],
     };
   },
   created() {
     this.getMineBuyList();
+  },
+  beforeMount() {
+    // this.getMineBuyList();
   },
   mounted() {
     var clientHight =
@@ -87,14 +95,19 @@ export default {
         tel: tel,
       });
       let newList = lists.data.data;
-      // let newTime = null
       if (lists.data.code == 1) {
         for (let i in newList) {
           newList[i].endtime =
             moment(newList[i].endtime).add(2, "days") - moment();
         }
         this.buys = newList;
+        this.myGoodsListMoney = Array(newList.length).fill({ newMoney: 0 });
         console.log(this.buys);
+        let {
+          data: { data },
+        } = await this.getMyGoodsMoney();
+        this.myGoodsListMoney = data;
+        console.log(this.myGoodsListMoney, data);
       }
     },
     async auctionGood(i) {
@@ -113,19 +126,20 @@ export default {
       });
       if (data.data.code == 1) {
         alert("成功");
-        this.show = false
-        this.money = null
+        this.getMineBuyList()
+        this.show = false;
+        this.money = null;
         this.upGoodIsnull;
       } else {
         alert("失败,请再次提交");
       }
     },
-    async getMyGoodsMoney(){
+    async getMyGoodsMoney() {
       console.log(this.buys);
-      let tel = this.$store.state.tel
-      let d = await this.$http.post(urlqing+'/getMyGoodsMoney',{tel:tel})
-      console.log(d);
-}
+      let tel = this.$store.state.tel;
+      let d = await this.$http.post(urlqing + "/getMyGoodsMoney", { tel: tel });
+      return d;
+    },
   },
 };
 </script>

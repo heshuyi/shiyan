@@ -42,7 +42,7 @@
             <div class="endtime">时间:{{ index.endtime }}</div>
             <div class="money">
               <div class="startmoney">发布:{{ index.money }}￥</div>
-              <div class="endmoney">现在:{{ index.money }}￥</div>
+              <div class="endmoney">现在:{{ newMoneyList[item] }}￥</div>
             </div>
             <DIV @click="addtoshop(index.goodsid)" class="add-to-shop">
               添加购物单
@@ -72,6 +72,7 @@ export default {
       showBoxValue: 0,
       showBoxBool: false,
       showValueObj: 12,
+      newMoneyList:[]
     };
   },
   created() {
@@ -124,11 +125,24 @@ export default {
       datas = datas.reverse()
       this.goods = datas;
       this.searchValue = goodsValue;
-    //   this.$nextTick(() => {
-    //   this.showBoxBool = true;
-    //   console.log(this.goods[0]);
-    //   this.showValueObj = this.goods[0];
-    // });
+      let d = await this.getAllGoodsMoney()
+      d=d.data.data
+      console.log(datas,d);
+      let nowMoney = []
+      for(let i = 0 ;i<datas.length;i++){
+        for(let j = 0;j<d.length;j++){
+          if(datas[i].goodsid == d[j].newGoodid){
+            nowMoney.push(d[j].maxmoney)
+          }
+        }
+      }
+      this.newMoneyList = nowMoney
+      
+    },
+    async getAllGoodsMoney(){
+      let data = await this.$http.post(urlqing+'/getAllGoodsMoney')
+      // console.log(data);
+      return data
     },
     async addtoshop(goodsid) {
       console.log(goodsid);
