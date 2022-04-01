@@ -1,27 +1,54 @@
 <template>
   <div class="buy-box">
-      <van-nav-bar class="title-box" title="购物车" />
+    <div v-if="show" class="pop">
+      <div @click="closeAddMoney" class="close-add-money"></div>
+      <div class="pop-mid">
+        <input
+          class="input-num"
+          v-model="money"
+          type="num"
+          placeholder="输入你要给出的价格"
+        />
+        <van-button @click="submitPrice" size="large" class="buttens"
+          >确定价格</van-button
+        >
+      </div>
+    </div>
+    <van-nav-bar class="title-box" title="购物车" />
     <div ref="showbox" class="show-box">
       <ul>
         <li class="goods-list" v-for="i in buys" :key="i.goodsId">
           <div class="goods-box">
             <img class="goods-img" :src="i.imgflie" alt="" />
             <div class="goods-describe">
-              <div class="goods-describe-list"><span class="goods-name">名字:</span><div>{{i.goodsname}}</div></div>
-              <div class="goods-describe-list"><span class="goods-name">描述:</span><div>{{i.text}}</div></div>
-              <div class="goods-describe-list"><span class="goods-name">作者:</span><div>{{i.tel}}</div></div>
+              <div class="goods-describe-list">
+                <span class="goods-name">名字:</span>
+                <div>{{ i.goodsname }}</div>
+              </div>
+              <div class="goods-describe-list">
+                <span class="goods-name">描述:</span>
+                <div>{{ i.text }}</div>
+              </div>
+              <div class="goods-describe-list">
+                <span class="goods-name">作者:</span>
+                <div>{{ i.tel }}</div>
+              </div>
             </div>
             <div class="moneys">
-              <div class="moneysdiv iconfont icon-jiagezixun">1</div>
-              <div class="moneysdiv iconfont icon-jiagezixun ">2</div>
+              <div class="moneysdiv iconfont icon-jiagezixun">{{i.money}}</div>
+              <div class="moneysdiv iconfont icon-jiagezixun">2</div>
               <div class="moneysdiv iconfont icon-chixushangzhang">3</div>
             </div>
-            <van-count-down :time="time" format="DD 天 HH 时 mm 分 ss 秒" />
+            <van-count-down
+              :time="i.endtime"
+              format="DD 天 HH 时 mm 分 ss 秒"
+            />
             <div class="jingpai">
-              <input class="inputs-goods" placeholder="请输入要竞拍的价格" type="number"  >
-              <van-button  class="chujia"  size="normal" @click="auctionGood(i)" >竞拍</van-button>
+              <!-- <input class="inputs-goods" placeholder="请输入要竞拍的价格" type="number"  > -->
+              <van-button class="chujia" size="large" @click="auctionGood(i)"
+                >竞拍</van-button
+              >
             </div>
-            
           </div>
         </li>
       </ul>
@@ -31,12 +58,17 @@
 
 <script>
 import { url as urlqing } from "../../js/url";
+import moment from "moment";
 export default {
   components: {},
   name: "Purchase",
   data() {
     return {
       buys: [],
+      show: false,
+      money: null,
+      upGoodIs: null,
+      myGoodsMoney:[]
     };
   },
   created() {
@@ -54,14 +86,46 @@ export default {
       let lists = await this.$http.post(urlqing + "/getAuctionList", {
         tel: tel,
       });
-      if(lists.data.code == 1){
-        this.buys = lists.data.data
+      let newList = lists.data.data;
+      // let newTime = null
+      if (lists.data.code == 1) {
+        for (let i in newList) {
+          newList[i].endtime =
+            moment(newList[i].endtime).add(2, "days") - moment();
+        }
+        this.buys = newList;
         console.log(this.buys);
       }
     },
-    async auctionGood(i){
-      console.log(i);
-    }
+    async auctionGood(i) {
+      this.upGoodIs = i.goodsid;
+      this.show = true;
+    },
+    closeAddMoney() {
+      this.show = false;
+    },
+    async submitPrice() {
+      let tel = this.$store.state.tel;
+      let data = await this.$http.post(urlqing + "/submitPrice", {
+        tel: tel,
+        money: this.money,
+        goodsid: this.upGoodIs,
+      });
+      if (data.data.code == 1) {
+        alert("成功");
+        this.show = false
+        this.money = null
+        this.upGoodIsnull;
+      } else {
+        alert("失败,请再次提交");
+      }
+    },
+    async getMyGoodsMoney(){
+      console.log(this.buys);
+      let tel = this.$store.state.tel
+      let d = await this.$http.post(urlqing+'/getMyGoodsMoney',{tel:tel})
+      console.log(d);
+}
   },
 };
 </script>
@@ -69,6 +133,47 @@ export default {
 .buy-box {
   width: 750rem;
   overflow-x: hidden;
+  .pop {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(51, 45, 45, 0.644);
+    // background-color: aliceblue;
+    z-index: 9999;
+    .close-add-money {
+      margin: 10px;
+      width: 50rem;
+      height: 50rem;
+      background-image: url("../../img/icon/back2.png");
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+    }
+    .pop-mid {
+      width: 500rem;
+      height: 300rem;
+      // background-color: rgb(70, 59, 59);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      .input-num {
+        width: 100%;
+        height: 100rem;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        // margin-bottom: 50rem;
+      }
+      .buttens {
+        // position: absolute;
+        // bottom: 0;
+        // margin-top: 50rem;
+        height: 100rem;
+      }
+    }
+  }
   .title-box {
     height: 56px;
   }
@@ -79,14 +184,13 @@ export default {
     overflow-x: hidden;
     .goods-list {
       width: 100%;
-      height: 600rem;
+      height: 550rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      // background-color: rgb(35, 96, 150);
       .goods-box {
         width: 700rem;
-        height: 550rem;
+        height: 500rem;
         background-color: aliceblue;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
           0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -96,23 +200,23 @@ export default {
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
             0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
-        .moneys{
+        .moneys {
           // height: 20rem;
           width: 100%;
           display: flex;
           height: 70rem;
           font-size: 50rem;
           // background-color: red;
-          justify-content:space-between;
-          .moneysdiv{
+          justify-content: space-between;
+          .moneysdiv {
             display: inline-block;
             font-size: 46rem;
           }
         }
-        .jingpai{
+        .jingpai {
           height: 80rem;
           // background-color: aqua;
-          .inputs-goods{
+          .inputs-goods {
             width: 560rem;
             height: 80rem;
             display: inline-block;
@@ -122,15 +226,17 @@ export default {
             margin-left: 5px;
             border-radius: 5px;
           }
-          .chujia{
-          background-color: azure;
-          float: right;
-          height: 70rem;
-          margin: 5rem;
-          border: 1px solid blue;
+          .chujia {
+            background-color: azure;
+            // float: right;
+            height: 70rem;
+            // margin: 50rem;
+            width: 690rem;
+            margin: 0 5rem;
+            border: 1px solid blue;
+          }
         }
-        }
-        
+
         .goods-describe {
           display: inline-block;
           vertical-align: top;
@@ -143,7 +249,7 @@ export default {
             overflow: hidden;
             word-wrap: break-word;
             word-break: break-all;
-            text-overflow:ellipsis;
+            text-overflow: ellipsis;
           }
         }
       }
