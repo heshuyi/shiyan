@@ -7,7 +7,7 @@
 </template>
 <script>
 // import { url as urlqing } from "../../js/url";
-let socket = null;
+// let socket = null;
 export default {
   name: "Mine",
   data() {
@@ -18,35 +18,35 @@ export default {
     };
   },
   beforeCreate() {
-    console.log(socket);
+    // console.log(socket);
   },
   created() {
     // this.initWebSocket();
     // this.$http.get(urlqing + "/api11", { params: { token: 1 } }).then((res) => {
     //   console.log(res);
     // });
-    socket = new WebSocket("ws://localhost:9999");
-    //当连接成功之后就会执行回调函数
-    socket.onopen = function () {
-      console.log("客户端连接成功");
-      //再向服务器发送一个消息
-      socket.send("didi"); //客户端发的消息内容 为hello
-    };
-    //绑定事件是用加属性的方式
-    socket.onmessage = function (event) {
-      console.log("收到服务器端的响应", event);
-    };
+    // socket = new WebSocket("ws://localhost:9999");
+    // //当连接成功之后就会执行回调函数
+    // socket.onopen = function () {
+    //   console.log("客户端连接成功");
+    //   //再向服务器发送一个消息
+    //   socket.send("didi"); //客户端发的消息内容 为hello
+    // };
+    // //绑定事件是用加属性的方式
+    // socket.onmessage = function (event) {
+    //   console.log("收到服务器端的响应", event);
+    // };
   },
   monted() {
     //绑定事件是用加属性的方式
   },
   destroyed() {
-    console.log(1111);
-    socket.onclose = function (evt) {
-      console.log("Connection closed."+evt);
-    };
-    socket.close()
-    console.log(1);
+    // console.log(1111);
+    // socket.onclose = function (evt) {
+    //   console.log("Connection closed."+evt);
+    // };
+    // socket.close()
+    // console.log(1);
     
     // socket = null
   },

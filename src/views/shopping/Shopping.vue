@@ -1,5 +1,6 @@
 <template>
   <div class="buy-box">
+    <div @click="asd">12312312312</div>
     <div v-if="show" class="pop">
       <div @click="closeAddMoney" class="close-add-money"></div>
       <div class="pop-mid">
@@ -41,7 +42,7 @@
               <div class="moneysdiv iconfont icon-jiagezixun">
                 {{ myGoodsListMoney[item].newMoney }}
               </div>
-              <div class="moneysdiv iconfont icon-chixushangzhang">3</div>
+              <div class="moneysdiv iconfont icon-chixushangzhang">{{maxList[item]}}</div>
             </div>
             <van-count-down
               :time="i.endtime"
@@ -63,6 +64,8 @@
 <script>
 import { url as urlqing } from "../../js/url";
 import moment from "moment";
+let socket = null;
+let moneylist = 123;
 export default {
   components: {},
   name: "Purchase",
@@ -74,10 +77,19 @@ export default {
       upGoodIs: null,
       myGoodsMoney: [],
       myGoodsListMoney: [],
+      maxList: [1,2],
     };
   },
   created() {
     this.getMineBuyList();
+    socket = new WebSocket("ws://localhost:9999");
+    //当连接成功之后就会执行回调函数
+    socket.onopen = function () {
+      console.log("客户端连接成功");
+      //再向服务器发送一个消息
+      socket.send("didi"); //客户端发的消息内容 为hello
+    };
+    //绑定事件是用加属性的方式
   },
   beforeMount() {
     // this.getMineBuyList();
@@ -87,8 +99,43 @@ export default {
       document.body.clientHight || document.documentElement.clientHeight;
     var showbox = this.$refs.showbox;
     showbox.style.height = clientHight - 106 + "px";
+    console.log(this.buys);
+    let c = (val)=>{
+      this.maxList = [...val]
+      console.log('ccccccc');
+    }
+    console.log(moneylist);
+    socket.onmessage = function (event) {
+      
+      let d;
+      let list = [];
+      console.log("收到服务器端的响应", event);
+      d = JSON.parse(event.data);
+      console.log(moneylist,d);
+      for (let i in moneylist) {
+        for (let j in d.data) {
+          console.log(moneylist[i].goodsid ,d.data[j].newGoodid);
+          if (moneylist[i].goodsid == d.data[j].newGoodid) {
+            list.push(d.data[j].maxmoney);
+            break
+          }
+        }
+      }
+      c(list)
+    };
+  },
+  destroyed() {
+    console.log(1111);
+    socket.onclose = function (evt) {
+      console.log("Connection closed." + evt);
+    };
+    socket.close();
+    console.log(1);
   },
   methods: {
+    asd(){
+      console.log(moneylist);
+    },
     async getMineBuyList() {
       let tel = this.$store.state.tel;
       let lists = await this.$http.post(urlqing + "/getAuctionList", {
@@ -101,13 +148,13 @@ export default {
             moment(newList[i].endtime).add(2, "days") - moment();
         }
         this.buys = newList;
+        moneylist = newList
         this.myGoodsListMoney = Array(newList.length).fill({ newMoney: 0 });
         console.log(this.buys);
         let {
           data: { data },
         } = await this.getMyGoodsMoney();
         this.myGoodsListMoney = data;
-        console.log(this.myGoodsListMoney, data);
       }
     },
     async auctionGood(i) {
@@ -126,12 +173,12 @@ export default {
       });
       if (data.data.code == 1) {
         alert("成功");
-        this.getMineBuyList()
+        this.getMineBuyList();
         this.show = false;
         this.money = null;
         this.upGoodIsnull;
       } else {
-        alert("失败,请再次提交");
+        alert(data.data.msg);
       }
     },
     async getMyGoodsMoney() {
