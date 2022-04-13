@@ -34,17 +34,17 @@
           >
             <img :src="index.imgflie" alt="" />
             <div class="name">
-              名字:<span :aiao="index.goodsname + 123">{{
-                index.goodsname
+              名字:<span :aiao="index.goodsName + 123">{{
+                index.goodsName
               }}</span>
             </div>
             <div class="text">描述:{{ index.text }}</div>
             <div class="endtime">时间:{{ index.endtime }}</div>
             <div class="money">
               <div class="startmoney">发布:{{ index.money }}￥</div>
-              <div class="endmoney">现在:{{ newMoneyList[item] }}￥</div>
+              <div class="endmoney">现在:{{ newMoneyList[item]==undefined?index.money:newMoneyList[item] }}￥</div>
             </div>
-            <DIV @click="addtoshop(index.goodsid)" class="add-to-shop">
+            <DIV @click="addtoshop(index.goodsId)" class="add-to-shop">
               添加购物单
             </DIV>
           </li>
@@ -72,7 +72,8 @@ export default {
       showBoxValue: 0,
       showBoxBool: false,
       showValueObj: 12,
-      newMoneyList:[]
+      newMoneyList:[],
+      a:undefined
     };
   },
   created() {
@@ -122,20 +123,29 @@ export default {
         search: goodsValue,
       });
       let datas = data.data.data
-      datas = datas.reverse()
+      datas = datas.reverse()//让最新的在上面
       this.goods = datas;
-      this.searchValue = goodsValue;
+      // this.searchValue = goodsValue;
       let d = await this.getAllGoodsMoney()
       d=d.data.data
       console.log(datas,d);
       let nowMoney = []
+      let flag1 = 0
+      // console.log(flag1);
       for(let i = 0 ;i<datas.length;i++){
+        flag1 = false
         for(let j = 0;j<d.length;j++){
           if(datas[i].goodsid == d[j].newGoodid){
+            flag1=true
             nowMoney.push(d[j].maxmoney)
           }
         }
+        if(flag1==false){
+          nowMoney.push(undefined)
+        }
+        
       }
+      console.log(nowMoney);
       this.newMoneyList = nowMoney
       
     },

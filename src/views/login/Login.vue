@@ -25,6 +25,7 @@
         :area-columns-placeholder="['请选择', '请选择', '请选择']"
         @save="onSave"
       >
+       <van-field v-model="email" :rules="[{ validator:checkEmail, message: '请输入正确内容'}]" label="邮箱" placeholder="请输入邮箱" />
         <template>
           <van-field
             key="123"
@@ -38,7 +39,7 @@
             v-model="newPassword2"
             placeholder="再输入密码"
             type="password"
-            label="密码2"
+            label="确认密码"
           />
         </template>
       </van-address-edit>
@@ -62,6 +63,7 @@ export default {
       text: "",
       newPassword1: "",
       newPassword2: "",
+      email:'',
     };
   },
   created(){
@@ -103,6 +105,12 @@ export default {
     makeNew() {
       this.makeNewBox = true;
     },
+    //校验邮箱
+    checkEmail(email) {
+      console.log(email);
+      var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      return reg.test(email);
+    },
     async onSave(content) {
       console.log(content);
       if (this.newPassword1 != this.newPassword2) {
@@ -118,13 +126,14 @@ export default {
         county: content.county,
         postalCode: content.postalCode,
         addressDetail: content.addressDetail,
+        email: this.email,
       };
       // console.log(newcontent);
       var res = await this.$http.post(urlqing+"/registered", newcontent);
       if (res.status == 200) {
         alert(res.data.msg);
       }
-      Toast("save");
+      Toast("创建成功");
     },
   },
 };
