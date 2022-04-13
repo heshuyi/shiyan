@@ -3,7 +3,7 @@ import Vue from 'vue'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
-    tel: '15302006236'
+    tel: '15302006230',
   },
   mutations: {
     setTel(state, value) {

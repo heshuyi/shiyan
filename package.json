@@ -1,5 +1,5 @@
 {
-  "name": "shopping",
+  "name": "eshop",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "axios": "^0.24.0",
     "better-scroll": "^2.4.2",
     "core-js": "^3.6.5",
+    "element-ui": "^2.15.6",
     "less": "^4.1.2",
     "less-loader": "^4.0.5",
     "moment": "^2.29.1",

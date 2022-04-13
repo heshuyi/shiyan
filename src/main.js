@@ -1,20 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import 'vant/lib/index.css'
 import axios from 'axios'
 import './js/rem'
-import Vant from 'vant'
 import store from '@/store/index'
-import webSockets from './js/webSockets'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 axios.defaults.withCredentials = true;
-Vue.use(Vant)
 Vue.prototype.$http = axios
-
-Vue.prototype.$webSockets = webSockets
-
 Vue.config.productionTip = false
 
+Vue.use(ElementUI);
 new Vue({
   store,
   router,
