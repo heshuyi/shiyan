@@ -1,1 +1,1 @@
-module.exports = { url: 'http://10.0.0.13:4001' }//请求的地址
+module.exports = { url: 'http://192.168.67.217:4001' }//请求的地址

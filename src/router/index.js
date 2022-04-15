@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
   // next 运行函数
   if (to.path == '/login')
     return next()
-  if (!store.state.tel) {
+  if (!store.state.user_telephone) {
     next('/login')
   } else {
     next()

@@ -18,6 +18,7 @@
   </div>
 </template>
 <script>
+import {url} from '../../js/url'
 export default {
   name: "login",
   created() {},
@@ -34,19 +35,23 @@ export default {
       this.$router.push("/new");
     },
     async login() {
-      // let d = this.$http.post("http://10.0.0.13:4001/admin", this.LoginUser);
-      // d = this.LoginUser.user_telephone
-      // console.log(d);
-      let d = this.LoginUser.user_telephone
-      console.log(d);
-      if (d==1) {
+      let data = await this.$http.post(url+"/user", this.LoginUser);
+      let d
+     if(data.data.code==1){
+       console.log(1123);
+        this.$store.commit("setTel", this.LoginUser.user_telephone);
+       d = data.data.data[0].user_power
+       if (d==0) {
         this.$message.success("登录成功");
         this.$router.push("/shop");
       }else if(d==2){
+        this.$message.success("登录成功");
         this.$router.push("/administrator");
-      }else if(d==3){
+      }else if(d==1){
+        this.$message.success("登录成功");
         this.$router.push("/employee");
-      }else {
+      }
+     }else {
         this.$message.error("登录失败");
       }
     },
